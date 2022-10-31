@@ -13,12 +13,11 @@ import {
 } from 'react';
 import { authentification } from './src/firebase';
 import MyAccounttScree from './src/screens/MyAccounttScree';
-import { useAppDispatch } from './src/store/hooks';
-import { setCurrentUserUID } from './src/store';
+import { useStorage } from './src/store';
 const Stack = createNativeStackNavigator();
 
 const AppNavigation = () => {
-  const reduxDispatch = useAppDispatch();
+  const { storeData } = useStorage();
   const [isLogged, setIsLogged] = useState(false);
 
   const MyTheme = {
@@ -33,7 +32,7 @@ const AppNavigation = () => {
     onAuthStateChanged(authentification, (user) => {
       if (user) {
         setIsLogged(true);
-        reduxDispatch(setCurrentUserUID(user.uid));
+        storeData('uid', user.uid);
       } else {
         setIsLogged(false);
       }

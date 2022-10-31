@@ -12,7 +12,6 @@ import AppNavigation from './AppNavigation';
 import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { Provider } from 'react-redux';
-import store from './src/store';
 import {
   NativeBaseProvider,
 } from 'native-base';
@@ -42,24 +41,22 @@ export default function App() {
   }
 
   return (
-    <Provider store={store}>
-      <NativeBaseProvider>
-        <View style={{ flex: 1 }}>
+    <NativeBaseProvider>
+      <View style={{ flex: 1 }}>
 
-          <StatusBar
-            hidden={true} />
+        <StatusBar
+          hidden={true} />
 
-          <LinearGradient
-            style={styles.calendarWrapper}
-            colors={[color.backgroundLight, color.backgroundDark]}>
+        <LinearGradient
+          style={styles.calendarWrapper}
+          colors={[color.backgroundLight, color.backgroundDark]}>
 
-            <AppNavigation />
+          <AppNavigation />
 
-          </LinearGradient>
+        </LinearGradient>
 
-        </View>
-      </NativeBaseProvider>
-    </Provider>
+      </View>
+    </NativeBaseProvider>
   );
 }
 

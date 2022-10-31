@@ -1,13 +1,10 @@
 import { collection, doc, setDoc, deleteDoc, getDocs, updateDoc } from "firebase/firestore";
 import { ITimeItem } from "../../types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { DB } from "../index";
 import { sortReserves } from "../services/dayService";
 // import { timeConverter } from "../services/timeService";
 
 export default function useReserve() {
-  const reduxDispatch = useAppDispatch();
-  const appState = useAppSelector(store => store.AppStore);
   const reserveRef = collection(DB, 'reserve');
 
   const errorHandler = (error: any) => {

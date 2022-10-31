@@ -36,14 +36,11 @@ import {
   authentification,
   firebaseConfig
 } from '../firebase';
-import { setLoading } from '../store';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const LoginScreen: FC = () => {
-  const appState = useAppSelector(store => store.AppStore);
-  const reduxDispatch = useAppDispatch();
   const { width: windowWidth } = useWindowDimensions();
   const toast = useToast();
+  const [loading, setLoading] = useState(true);
 
   const recaptchaVerifier: LegacyRef<FirebaseRecaptchaVerifierModal> | undefined = useRef(null);
 
@@ -117,7 +114,7 @@ const LoginScreen: FC = () => {
       }
       // номер прошел проверку
       else {
-        reduxDispatch(setLoading(true));
+        setLoading(true);
         if (recaptchaVerifier.current) {
           const ref = drawerRef;
           const phone = '+375' + phoneNumber.split(' ').join('');
@@ -139,13 +136,13 @@ const LoginScreen: FC = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      reduxDispatch(setLoading(false));
+      setLoading(false);
     }
   }
 
   const confirmCode = async () => {
     try {
-      reduxDispatch(setLoading(true));
+      setLoading(true);
       const credential = PhoneAuthProvider.credential(verificationId, OTP);
       await signInWithCredential(authentification, credential);
       toast.show({
@@ -164,7 +161,7 @@ const LoginScreen: FC = () => {
           variant='error' />
       });
     } finally {
-      reduxDispatch(setLoading(false));
+      setLoading(false);
     }
   }
 
@@ -177,7 +174,7 @@ const LoginScreen: FC = () => {
         attemptInvisibleVerification={true}
       />
 
-      <CustomSpinner />
+      <CustomSpinner isActive={loading} />
 
       <Logo />
 

@@ -1,13 +1,10 @@
 import { collection, doc, updateDoc, deleteField, setDoc, deleteDoc, getDocs, query, where, addDoc, onSnapshot } from "firebase/firestore";
 import { IReserveItem, ITimeItem } from "../../types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { DB } from "../index";
 import useReserve from "./reserveController";
 import useAuth from "./userController";
 
 export default function useTime() {
-  const reduxDispatch = useAppDispatch();
-  const appState = useAppSelector(store => store.AppStore);
 
   const { addReserve, deleteReserve } = useReserve();
 

@@ -10,13 +10,9 @@ import CustomToast from "../components/CustomToast";
 import ScreenHeader from "../components/ScreenHeader";
 import { color, fonts } from "../constants";
 import useAuth from "../firebase/controllers/userController";
-import { setLoading } from "../store";
-import {
-  useAppDispatch,
-  useAppSelector
-} from "../store/hooks";
 import { IUser, Screen } from "../types";
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useStorage } from "../store";
 
 interface IMyAccounttScree extends Screen {
 
@@ -25,16 +21,19 @@ interface IMyAccounttScree extends Screen {
 const MyAccounttScree: FC<IMyAccounttScree> = ({
   navigation,
 }) => {
-  const appState = useAppSelector(store => store.AppStore);
-  const reduxDispatch = useAppDispatch();
   const toast = useToast();
   const { getUserInfo } = useAuth();
+  const {
+    getData,
+  } = useStorage();
+  const [loading, setLoading] = useState(true);
 
   const [user, setUser] = useState<IUser | null>(null);
 
   const getUser = async () => {
     try {
-      const user = await getUserInfo(appState.currentUserUID);
+      const uid = await getData('uid');
+      const user = await getUserInfo(uid);
       user &&
         setUser(user);
     } catch (e) {
@@ -51,7 +50,7 @@ const MyAccounttScree: FC<IMyAccounttScree> = ({
   useEffect(() => {
     (async () => {
       try {
-        reduxDispatch(setLoading(true));
+        setLoading(true);
         await getUser();
       } catch (e) {
         navigation.goBack();
@@ -62,7 +61,7 @@ const MyAccounttScree: FC<IMyAccounttScree> = ({
             variant='error' />
         });
       } finally {
-        reduxDispatch(setLoading(false));
+        setLoading(false);
       }
     })()
   }, []);

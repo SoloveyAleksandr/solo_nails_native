@@ -1,10 +1,12 @@
 import { FC } from "react";
 import { Spinner } from 'native-base';
 import { color } from "../constants";
-import { useAppSelector } from "../store/hooks";
 
-const CustomSpinner: FC = () => {
-  const appState = useAppSelector(store => store.AppStore);
+interface ICustomSpinner {
+  isActive: boolean,
+}
+
+const CustomSpinner: FC<ICustomSpinner> = ({ isActive }) => {
   return (
     <Spinner
       size={50}
@@ -18,7 +20,7 @@ const CustomSpinner: FC = () => {
           justifyContent: 'center',
           backgroundColor: color.black80,
           zIndex: 1000,
-          display: appState.isLoading ? 'flex' : 'none'
+          display: isActive ? 'flex' : 'none'
         }} />
   )
 };

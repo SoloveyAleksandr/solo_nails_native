@@ -1,20 +1,18 @@
 import { FC, useState, useRef } from 'react';
 import { Text, StyleSheet, SafeAreaView } from 'react-native';
+import { Screen } from '../types';
 
-interface IDayScreen {
-  navigation: any,
+interface IDayScreen extends Screen {
 }
 
 const DayScreen: FC<IDayScreen> = ({ navigation }) => {
-  
+
   return (
     <SafeAreaView style={styles.wrapper}>
 
       <Text style={styles.title}>
         Записи
       </Text>
-
-
 
     </SafeAreaView>
   )

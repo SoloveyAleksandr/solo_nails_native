@@ -5,16 +5,14 @@ import {
     setDoc,
     updateDoc
 } from "firebase/firestore";
-import { setCurrentUserInfo } from "../../store";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useStorage } from "../../store";
 import { ITimeItem } from "../../types";
 import { authentification, DB } from "../index";
 import { History, User, userConverter } from "../services/userService";
 import useReserve from "./reserveController";
 
 export default function useAuth() {
-    const appState = useAppSelector(s => s.AppStore);
-    const reduxDispatch = useAppDispatch();
+    const { storeData, getData } = useStorage();
     const auth = authentification;
 
     const userRef = collection(DB, "user");
@@ -55,7 +53,7 @@ export default function useAuth() {
             if (user) {
                 const userSnap = await getDoc(doc(userRef, user.uid).withConverter(userConverter));
                 if (userSnap.exists()) {
-                    reduxDispatch(setCurrentUserInfo(userSnap.data()));
+                    await storeData('userInfo', userSnap.data());
                     return;
                 } else {
                     const newUser = new User(user.uid, user.phoneNumber || '');

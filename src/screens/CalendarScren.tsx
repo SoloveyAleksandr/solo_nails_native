@@ -10,22 +10,17 @@ import {
   Text,
   TouchableOpacity,
   useWindowDimensions,
-  Image,
 } from 'react-native';
 import {
-  RectButton,
   GestureHandlerRootView,
   DrawerLayout,
 } from 'react-native-gesture-handler';
-import { setLoading, setMonth, setNextMonth, setPrevMonth, setYear } from '../store';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { Ionicons } from '@expo/vector-icons';
 import { color, fonts } from '../constants';
 import MonthController from '../components/MonthController';
 import Calendar from '../components/Calendar';
 import Menu from '../components/Menu';
 import Logo from '../components/Logo';
-import FormBtn from '../components/FormBtn';
 import { signOut } from 'firebase/auth';
 import { authentification } from '../firebase';
 import {
@@ -34,8 +29,6 @@ import {
 } from 'native-base';
 import CustomToast from '../components/CustomToast';
 import CustomSpinner from '../components/CustomSpinner';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { ParamListBase } from '@react-navigation/native';
 import { Screen } from '../types';
 
 
@@ -44,17 +37,34 @@ interface ICalendarScreen extends Screen {
 }
 
 const CalendarScreen: FC<ICalendarScreen> = ({ navigation }) => {
-  const appState = useAppSelector(store => store.AppStore);
-  const reduxDispatch = useAppDispatch();
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const { width: windowWidth } = useWindowDimensions();
   const toast = useToast();
+  const [month, setMonth] = useState(0);
+  const [year, setYear] = useState(0);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const date = moment();
-    reduxDispatch(setMonth(date.month()));
-    reduxDispatch(setYear(date.year()));
+    setMonth(date.month());
+    setYear(date.year());
   }, []);
+
+  const setPrevMonth = () => {
+    if (month === 0) {
+      setMonth(11);
+      return;
+    }
+    setMonth(prev => prev - 1);
+  };
+
+  const setNextMonth = () => {
+    if (month === 11) {
+      setMonth(0);
+      return;
+    }
+    setMonth(prev => prev + 1);
+  };
 
   const renderMenu = () => {
     return (
@@ -121,7 +131,7 @@ const CalendarScreen: FC<ICalendarScreen> = ({ navigation }) => {
 
   const signOutHandler = async () => {
     try {
-      reduxDispatch(setLoading(true));
+      setLoading(true);
       await signOut(authentification);
       toast.show({
         placement: 'top',
@@ -137,7 +147,7 @@ const CalendarScreen: FC<ICalendarScreen> = ({ navigation }) => {
           variant='error' />
       })
     } finally {
-      reduxDispatch(setLoading(false));
+      setLoading(false);
     }
   }
 
@@ -149,7 +159,7 @@ const CalendarScreen: FC<ICalendarScreen> = ({ navigation }) => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
 
-      <CustomSpinner />
+      <CustomSpinner isActive={loading} />
 
       <Logo />
 
@@ -175,13 +185,13 @@ const CalendarScreen: FC<ICalendarScreen> = ({ navigation }) => {
 
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <MonthController
-            month={appState.month}
-            year={appState.year}
-            prevMonth={() => reduxDispatch(setPrevMonth())}
-            nextMonth={() => reduxDispatch(setNextMonth())} />
+            month={month}
+            year={year}
+            prevMonth={setPrevMonth}
+            nextMonth={setNextMonth} />
           <Calendar
-            selMonth={appState.month}
-            selYear={appState.year} />
+            selMonth={month}
+            selYear={year} />
         </View>
 
       </DrawerLayout>
