@@ -1,0 +1,43 @@
+{
+  "expo": {
+    "name": "SOLO nails",
+    "slug": "solo_nails",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/iconSolo.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splashSolo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-iconSolo.png",
+        "backgroundColor": "#FFFFFF"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
+  }
+}
